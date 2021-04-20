@@ -1,5 +1,6 @@
 package com.xbyrh;
 
+import org.bytedeco.javacpp.avcodec;
 import org.bytedeco.javacv.*;
 
 /**
@@ -27,6 +28,8 @@ public class GrabStream {
         FFmpegFrameGrabber grabber = new FFmpegFrameGrabber(inputFile);
         // 流媒体输出地址，分辨率（长，高），是否录制音频（0:不录制/1:录制）
         FFmpegFrameRecorder recorder = new FFmpegFrameRecorder(outputFile, 1280, 720, audioChannel);
+        recorder.setVideoCodec(avcodec.AV_CODEC_ID_H264); // avcodec.AV_CODEC_ID_H264，编码
+        recorder.setFrameRate(25D);
         // 开始取视频源
         recordByFrame(grabber, recorder, isStart);
     }
@@ -42,7 +45,7 @@ public class GrabStream {
 
             while (status&& (frame = grabber.grabFrame()) != null) {
                 recorder.record(frame);
-                if (System.currentTimeMillis() - startTime >= 100000) {
+                if (System.currentTimeMillis() - startTime >= 10000) {
                     break;
                 }
             }
@@ -60,7 +63,7 @@ public class GrabStream {
 
         String inputFile = "https://flvopen.ys7.com:9188/openlive/6e0b2be040a943489ef0b9bb344b96b8.hd.flv";
         // Decodes-encodes
-        String outputFile = "recorde.mp4";
+        String outputFile = "record.mp4";
         frameRecord(inputFile, outputFile,1);
     }
 }

@@ -57,4 +57,8 @@ public class PushStream {
 
     }
 
+    public static void main(String[] args) throws Exception {
+        recordCamera("rtmp://192.168.18.180:1935/myapp/opencv",25D);
+    }
+
 }
